@@ -1,24 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from "react";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Form from "./components/Form";
+import Note from "./components/Note"
+
 
 function App() {
+  const [ notes, setNotes ] = useState([]);
+
+	const addNote = (note) => {
+		setNotes([ ...notes, note ]);
+	};
+
+	const deleteNote = (uniqueId) => {
+		const newArr = notes.filter((ele, idx) => {
+			return idx !== uniqueId;
+		});
+		setNotes(newArr);
+	};
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      <Header />
+      <Form addNote={addNote} />
+      {notes.map((ele, idx) => {
+				return (
+					<Note key={idx} title={ele.title} content={ele.content} deleteNote={deleteNote} uniqueId={idx} />
+				);
+			})}
+      <Footer />
+    </React.Fragment>
   );
 }
 
